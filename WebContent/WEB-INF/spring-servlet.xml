@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx">
+
+	<context:component-scan base-package="lti.octave.repo,lti.octave.service,lti.octave.controller" />
+	
+	<mvc:annotation-driven/>
+	 	 
+	
+
+	<!--  ========================================= URL Handler ===========================================  -->
+	<bean class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping" />
+	
+	<!--  ========================================= View Resolvers ===========================================  -->
+	<bean
+		class="org.springframework.web.servlet.view.BeanNameViewResolver">
+	</bean>
+
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/" />
+		<property name="suffix" value=".jsp" /> <!-- example1 me apne app add ho jayega .jsp -->
+	</bean>
+  
+  
+
+	<!--  ========================================= Validation ====================================  -->
+
+	<!-- <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+		<property name="validationMessageSource" ref="messageSource" />
+	</bean> -->
+  	 
+	<!--  ========================================= I18N ===========================================  -->
+	
+	<!-- <bean id="messageSource"
+	        class="org.springframework.context.support.ResourceBundleMessageSource">
+	    <property name="basenames">
+	      <list>
+	        <value>resources.mymessages</value>
+	      </list>
+	    </property>
+	</bean>
+	
+	<bean id="localeResolver"
+	    class="org.springframework.web.servlet.i18n.SessionLocaleResolver" />
+
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/example9"/>
+				<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+					<property name="paramName" value="lang" />
+				</bean>
+		</mvc:interceptor>
+	</mvc:interceptors>	
+ -->
+
+			
+	<!--  ========================================= Exception handlers ===========================================  -->
+
+	<bean id="exceptionMapping"
+		class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+	    <property name="mappedHandlers">
+	       <set>
+			<!-- <ref local="registerController" />  -->
+		   </set>
+		</property>
+		<property name="exceptionMappings">
+			<props>
+				<prop key="NullPointer">unexpectedError</prop>
+			</props>
+		</property>
+	</bean>
+
+	
+</beans>
