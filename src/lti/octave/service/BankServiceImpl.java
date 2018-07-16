@@ -9,10 +9,13 @@ import org.springframework.stereotype.Service;
 import lti.octave.bean.AadharBean;
 import lti.octave.bean.AccountBean;
 import lti.octave.bean.ForgetBean;
+import lti.octave.bean.FundTransferBean;
 import lti.octave.bean.LoginBean;
+import lti.octave.bean.TransactionBean;
 import lti.octave.repo.AccountAlreadyExistException;
+import lti.octave.repo.BalanceException;
 import lti.octave.repo.BankRepository;
-
+import lti.octave.repo.InvalidAccountException;
 import lti.octave.repo.PasswordDoesnotExistException;
 
 /**
@@ -68,5 +71,29 @@ public class BankServiceImpl implements BankService {
 			return false;
 		}
 	}
+
+	@Override
+	public void deposit(FundTransferBean fund) throws InvalidAccountException {
+		repo.depositAmount(fund);
+
+	}
+
+	@Override
+	public void withdraw(FundTransferBean fund, long acntNo) throws BalanceException {
+		repo.withdrawAmount(fund, acntNo);
+	}
+
+	@Override
+	public List<TransactionBean> getTxnDetails(AccountBean user) {
+		return repo.fetchDetails(user);
+	}
+
+	@Override
+	public AadharBean getUserDetails(AccountBean user) {
+		AadharBean userName = repo.getUserDetails(user);
+		return userName;
+	}
+	
+	
 
 }

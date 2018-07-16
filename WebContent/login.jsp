@@ -12,6 +12,7 @@
 <div>
 	<Center>
 		<form action="Signin.bank" method="post">
+		<div style= "color:red">${wrongpass} ${invalid}</div>
 			<table  class="table table-hover" border="1">
 				<%
 					if (request.getParameter("invalid") != null) {

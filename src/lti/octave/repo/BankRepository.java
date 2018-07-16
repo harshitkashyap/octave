@@ -5,7 +5,9 @@ import java.util.List;
 import lti.octave.bean.AadharBean;
 import lti.octave.bean.AccountBean;
 import lti.octave.bean.ForgetBean;
+import lti.octave.bean.FundTransferBean;
 import lti.octave.bean.LoginBean;
+import lti.octave.bean.TransactionBean;
 
 public interface BankRepository {
 
@@ -26,4 +28,13 @@ public interface BankRepository {
 
 	// Method to Update Password
 	void upadatePassword(String newPassword, ForgetBean forget);
+
+	void depositAmount(FundTransferBean fund) throws InvalidAccountException;
+
+	void withdrawAmount(FundTransferBean fund, long acntNo) throws BalanceException;
+
+	// Method to fetch details
+	List<TransactionBean> fetchDetails(AccountBean user);
+	
+	AadharBean getUserDetails(AccountBean user);
 }

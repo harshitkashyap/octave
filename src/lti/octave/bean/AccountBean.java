@@ -1,6 +1,6 @@
 package lti.octave.bean;
 
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -21,32 +21,30 @@ import org.hibernate.annotations.NaturalId;
 @SequenceGenerator(name = "accountNo", sequenceName = "ACCOUNTSEQ")
 public class AccountBean {
 
-	/*Linking AadharBean with AccountBean using AadharNo*/
+	/* Linking AadharBean with AccountBean using AadharNo */
 	@OneToOne
-	@JoinColumn(name="aadharNo")
+	@JoinColumn(name = "aadharNo")
 	private AadharBean aadhar;
-	
-	/*@OneToMany(cascade={CascadeType.ALL})
-	  @JoinColumn(name="acnt_no")
-	  private Set transactions;*/
-	
-	/*Auto Generated Sequence for Account Number*/
+
+	@OneToMany(mappedBy="account", cascade = { CascadeType.ALL })
+	private List<TransactionBean> transactions;
+
+	/* Auto Generated Sequence for Account Number */
 	@Id
 	@Column(name = "acnt_no")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "accountNo")
 	private long accountNo;
-	
+
 	@Column
 	private String panNo;
-	
+
 	@Column
 	@NaturalId
 	private String email;
-	
-	
+
 	@Column
 	private String password;
-	
+
 	@Column
 	private double currentBalance;
 
@@ -98,13 +96,12 @@ public class AccountBean {
 		this.aadhar = aadhar;
 	}
 
-	public Set getTransactions() {
+	public List<TransactionBean> getTransactions() {
 		return transactions;
 	}
 
-	public void setTransactions(Set transactions) {
+	public void setTransactions(List<TransactionBean> transactions) {
 		this.transactions = transactions;
 	}
-	
 
 }

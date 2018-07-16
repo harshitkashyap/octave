@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import lti.octave.bean.AadharBean;
 import lti.octave.bean.AccountBean;
 import lti.octave.bean.LoginBean;
 import lti.octave.repo.PasswordDoesnotExistException;
@@ -45,6 +46,8 @@ public class LoginController {
 		/* Proceed if Email and Password is Correct */
 		if (user != null) {
 			session.setAttribute("User", user);
+			AadharBean userName = service.getUserDetails(user);
+			session.setAttribute("userName", userName);
 			mav.setViewName("profile");
 			return mav;
 		}
@@ -58,5 +61,11 @@ public class LoginController {
 		}
 
 	}
+	
+	@RequestMapping(value = "Signout.bank",method=RequestMethod.GET)
+    public String logout(HttpSession session) {
+      session.invalidate();
+      return "Home";
+    }
 
 }

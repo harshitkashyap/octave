@@ -25,6 +25,7 @@
 				<value>lti.octave.bean.AccountBean</value>
 				<value>lti.octave.bean.LoginBean</value>
 				<value>lti.octave.bean.AadharBean</value>
+				<value>lti.octave.bean.TransactionBean</value>
 			</list>
 
 		</property>

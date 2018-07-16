@@ -2,6 +2,8 @@ package lti.octave.repo;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
@@ -13,7 +15,9 @@ import org.springframework.stereotype.Repository;
 import lti.octave.bean.AadharBean;
 import lti.octave.bean.AccountBean;
 import lti.octave.bean.ForgetBean;
+import lti.octave.bean.FundTransferBean;
 import lti.octave.bean.LoginBean;
+import lti.octave.bean.TransactionBean;
 
 /**
  * 
@@ -26,6 +30,8 @@ public class BankRepositoryImpl implements BankRepository {
 
 	@Autowired
 	private SessionFactory factory;
+	
+	private HttpSession httpSession;
 
 	@Override
 	public AadharBean validate(long aadharNo) throws AccountAlreadyExistException {
@@ -134,4 +140,85 @@ public class BankRepositoryImpl implements BankRepository {
 
 	}
 
+	@Override
+	public void depositAmount(FundTransferBean fund) throws InvalidAccountException {
+		Session session = factory.openSession();
+		Transaction txn = session.getTransaction();
+//		String sql = "SELECT * from account where acnt_no = " + fund.getAccountTo();
+//		SQLQuery query = session.createSQLQuery(sql);
+		txn.begin();
+		AccountBean account = (AccountBean) session.load(AccountBean.class, fund.getAccountTo());
+		
+//		if(query.uniqueResult() != null) {
+		if(account != null) {
+			try {
+				
+				
+				double balance = account.getCurrentBalance();
+				account.setCurrentBalance(balance + fund.getAmount());
+				TransactionBean transaction = new TransactionBean("Credit", fund.getAmount(), account.getCurrentBalance());
+				transaction.setAccount(account);
+				session.save(transaction);
+				
+				txn.commit();
+			} catch (Exception e) {
+				txn.rollback();
+				e.printStackTrace();
+			}
+		}
+		else {
+			throw new InvalidAccountException("Sorry !! The value entered in Account To field is WORNG");
+		}
+		
+	}
+
+	@Override
+	public void withdrawAmount(FundTransferBean fund, long acntNo) throws BalanceException{
+		Session session = factory.openSession();
+		Transaction txn = session.getTransaction();
+//		String sql = "SELECT * from account where acnt_no = " + acntNo;
+//		SQLQuery query = session.createSQLQuery(sql);
+		txn.begin();
+		AccountBean account = (AccountBean) session.load(AccountBean.class, acntNo);
+		
+//		if(query.uniqueResult() != null) {
+			
+		if(account != null) {
+			double amount = account.getCurrentBalance();
+			
+			if(fund.getAmount() < amount ) {
+				try {
+					
+					account.setCurrentBalance(amount - fund.getAmount());
+					TransactionBean transaction = new TransactionBean("Debit", fund.getAmount(), account.getCurrentBalance());
+					transaction.setAccount(account);
+					session.save(transaction);
+					txn.commit();
+				} catch (Exception e) {
+					txn.rollback();
+					e.printStackTrace();
+				}
+			}
+			else {
+				throw new BalanceException("Sorry !! Insufficient Funds");
+			}
+		}
+		
+	}
+	
+	@Override
+	public List<TransactionBean> fetchDetails(AccountBean user) {
+		Session session = factory.openSession();
+		Transaction txn = session.beginTransaction();
+		AccountBean bean = (AccountBean) session.get(AccountBean.class, user.getAccountNo());
+		List<TransactionBean> details = bean.getTransactions();
+		txn.commit();
+		return details;
+	}
+
+	@Override
+	public AadharBean getUserDetails(AccountBean user) {
+		AadharBean aadharNo = user.getAadhar();
+		return aadharNo;
+	}
 }

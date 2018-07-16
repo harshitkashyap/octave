@@ -1,3 +1,6 @@
+<%@page import="java.util.Date"%>
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.text.DateFormat"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -17,12 +20,18 @@
 	<div class="container-fluid">
 		<div class="row" id="nav">
 
-			<div class="col-lg-4 horizon">You are logged in as:</div>
-
-			<div class="col-lg-4 horizon">Date:</div>
+			<div class="col-lg-4 horizon">You are logged in as: ${ userName.name}</div>
 
 			<div class="col-lg-4 horizon">
-				<a class="list_link" href="">Logout</a>
+				Date:<%
+				DateFormat df = new SimpleDateFormat("dd/MM/yy");
+				String formattedDate = df.format(new Date());
+				out.println(formattedDate);
+			%>
+			</div>
+
+			<div class="col-lg-4 horizon">
+				<a class="list_link" href="Signout.bank">Logout</a>
 			</div>
 
 		</div>
@@ -35,9 +44,12 @@
 				<ul>
 					<li><a class="list_link" href="">Profile</a></li>
 					<li><a class="list_link">Account Statement </a></li>
+					<li><a class="list_link" href="txndetails.bank"> Mini
+							Statement </a></li>
 					<li><a class="list_link" href="">Add Beneficiary </a></li>
 					<li><a class="list_link" href="">Inter Bank Fund Transfer</a></li>
-					<li><a class="list_link" href="">Intra Bank Fund Transfer</a></li>
+					<li><a class="list_link" href="fundtransfer.jsp">Intra
+							Bank Fund Transfer</a></li>
 					<li><a class="list_link" href="">Change Password</a></li>
 				</ul>
 			</div>
@@ -48,23 +60,15 @@
 
 				<table style="position: relative; top: 100px; left: 100px;">
 					<tr>
-						<td>Account Name</td>
-						<td>Name</td>
-						<td>Available Balance</td>
-						<td>Transaction</td>
-					</tr>
-
-					<tr>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td><a href="">Click here for 10 transactions</a></td>
+						<td>Account Number : ${User.accountNo}</td>
+						<td>Name : ${userName.name}</td>
+						<td>Available Balance :${User.currentBalance}</td>
 					</tr>
 
 				</table>
 
 				<div style="text-align: center; position: relative; top: 120px;">
-					<a href="pan.jsp">View Nomination And PAN Details</a>
+					<a href="nominations.jsp">View Nomination And PAN Details</a>
 				</div>
 
 			</div>

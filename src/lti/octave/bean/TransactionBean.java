@@ -15,7 +15,6 @@ import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "transaction")
-
 public class TransactionBean {
 	
 	@ManyToOne
@@ -23,7 +22,7 @@ public class TransactionBean {
 	private AccountBean account;
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.TABLE)
 	private int txnId;
 	
 	@Column
@@ -34,7 +33,18 @@ public class TransactionBean {
 	private Date txnDate;
 	
 	private double amount;
-    private double balance;
+    private double currentBalance;
+    
+    public TransactionBean() {
+	}
+    
+	public TransactionBean(String type, double amount, double currentBalance) {
+		this.type = type;
+		this.amount = amount;
+		this.currentBalance = currentBalance;
+		this.txnDate = new Date(System.currentTimeMillis());
+	}
+	
 	public AccountBean getAccount() {
 		return account;
 	}
@@ -65,15 +75,10 @@ public class TransactionBean {
 	public void setAmount(double amount) {
 		this.amount = amount;
 	}
-	public double getBalance() {
-		return balance;
+	public double getCurrentBalance() {
+		return currentBalance;
 	}
-	public void setBalance(double balance) {
-		this.balance = balance;
+	public void setCurrentBalance(double currentBalance) {
+		this.currentBalance = currentBalance;
 	}
-    
-    
-	 
-	
-
 }
